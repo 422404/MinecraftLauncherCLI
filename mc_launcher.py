@@ -5,6 +5,7 @@ import sys
 import platform
 import json
 from argparse import ArgumentParser
+from pathlib import Path
 from lib_mc_launcher import build_paths, construct_cmd, get_libs_manifests, get_main_class, download_manifest, download_assets_manifest, fetch_manifest, get_native_libs_manifests
 from lib_mc_download import download_assets, download_client, download_libs
 
@@ -168,9 +169,10 @@ def download_version(version: str, game_dir: str, verbose: bool):
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument("-d", "--game-dir", metavar="PATH", dest="game_dir", type=str, default="~/.minecraft",
+    default_path = os.path.join(Path.home(), ".minecraft")
+    parser.add_argument("-d", "--game-dir", metavar="PATH", dest="game_dir", type=str, default=default_path,
             help="game directory, defaults to %(default)s")
-    parser.add_argument("-v", "--verbose", dest="verbose", action="store_true", help="verbose output")
+    parser.add_argument("--silent", dest="verbose", action="store_false", help="silent output")
 
     base_subparsers = parser.add_subparsers(title="Subcommands", dest="base_cmd")
     launch_parser: ArgumentParser = base_subparsers.add_parser("launch", help="launch the game",
